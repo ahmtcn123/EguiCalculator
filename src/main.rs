@@ -11,13 +11,9 @@ fn main() -> eframe::Result {
         ..Default::default()
     };
     eframe::run_native(
-        "My egui App",
+        "Egui Calculator",
         options,
-        Box::new(|cc| {
-            // This gives us image support:
-
-            Ok(Box::new(NumberButtonsApp::default()))
-        }),
+        Box::new(|cc| Ok(Box::new(NumberButtonsApp::default()))),
     )
 }
 
@@ -38,9 +34,6 @@ impl Default for NumberButtonsApp {
 impl eframe::App for NumberButtonsApp {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         egui::CentralPanel::default().show(ctx, |ui| {
-            let window_margin = ui.spacing().window_margin;
-            let size_1x1 = Vec2::new(75.0, 65.0);
-
             ui.with_layout(
                 Layout::centered_and_justified(egui::Direction::BottomUp),
                 |ui| {
@@ -70,7 +63,14 @@ impl eframe::App for NumberButtonsApp {
                             ui.columns(4, |columns| {
                                 for (i, value) in row.iter().enumerate() {
                                     let button = Button::new(RichText::new(*value).size(20.0));
-                                    let clicked = columns[i].add_sized(size_1x1, button).clicked();
+                                    if value.is_empty() {
+                                        columns[i].add_enabled_ui(false, |ui| {
+                                            ui.add_sized(Vec2::new(75.0, 65.0), button);
+                                        });
+                                        continue;
+                                    }
+
+                                    let clicked = columns[i].add_sized(Vec2::new(75.0, 65.0), button).clicked();
 
                                     if clicked {
                                         // Handle button press logic
