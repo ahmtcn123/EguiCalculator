@@ -1,0 +1,9 @@
+[package]
+name = "EguiCalculator"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+eframe = "0.29.1"
+env_logger = "0.11.5"
+meval = "0.2.0"
